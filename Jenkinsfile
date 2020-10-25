@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo "Running ${env.BUILD_ID} --->  ${env.NODE_NAME}"
             }
         }
         stage('Test') {
