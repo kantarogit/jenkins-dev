@@ -10,7 +10,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                build job: 'jenkins-test/main', propagate: true, wait: true
+                build job: 'jenkins-test/${env.BRANCH_NAME}', propagate: true, wait: true
             }
         }
         stage('Deploy') {
