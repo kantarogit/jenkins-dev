@@ -10,6 +10,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
+                build job: 'jenkins-test'
             }
         }
         stage('Deploy') {
