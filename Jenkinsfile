@@ -8,7 +8,7 @@ pipeline {
                     branch 'main'
                     branch 'development'
                     branch 'feature/*'
-                    changeRequest
+                    changeRequest()
                 }
 
             }
