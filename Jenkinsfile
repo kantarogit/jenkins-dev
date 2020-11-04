@@ -20,7 +20,7 @@ pipeline {
                         echo "Running maven build on branch ${env.BRANCH_NAME}"
                     }
                 }
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
 
