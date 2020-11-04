@@ -19,9 +19,8 @@ pipeline {
                     } else {
                         echo "Running maven build on branch ${env.BRANCH_NAME}"
                     }
-                    sh 'mvn clean install'
-
                 }
+                sh 'mvn clean install'
             }
         }
 
