@@ -27,6 +27,8 @@ pipeline {
         stage('Deploy to DEV') {
             when {
                 branch 'feature/*'
+                // Todo delete just for testing
+                changeRequest() // CHANGE_BRANCH
             }
             steps {
                 script {
