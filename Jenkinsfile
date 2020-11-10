@@ -29,7 +29,16 @@ pipeline {
                 branch 'feature/*'
             }
             steps {
-                echo "Deploying image from ${env.BRANCH_NAME} to DEV cluster "
+                // read pom
+                echo "Reading pom..."
+                pom = readMavenPom(file: 'pom.xml')
+                echo pom
+                // increment version
+                // deploy local artifact to jfrog
+                // push incremented version to github
+                echo "Deploying image to jfrog artifactory..."
+                bat "mvn deploy"
+                echo "Deploying image from ${env.BRANCH_NAME} to DEV cluster..."
             }
         }
 
