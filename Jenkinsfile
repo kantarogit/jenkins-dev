@@ -34,7 +34,8 @@ pipeline {
                 script {
                     // read pom
                     echo "Reading pom..."
-                    pom = readMavenPom(file: 'pom.xml')
+                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+
                     echo pom
                     // increment version
                     // deploy local artifact to jfrog
