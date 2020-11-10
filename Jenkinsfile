@@ -24,17 +24,26 @@ pipeline {
             }
         }
 
+        stage('Read pom') {
+            steps {
+                script {
+                    pom = readMavenPom(file: 'pom.xml')
+                    echo pom
+//                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+
+                }
+            }
+        }
+
         stage('Deploy to DEV') {
             when {
-                // branch 'feature/*'
-                // Todo delete just for testing
-                changeRequest() // CHANGE_BRANCH
+                 branch 'feature/*'
             }
             steps {
                 script {
                     // read pom
                     echo "Reading pom..."
-                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+//                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
 
                     echo pom
                     // increment version
