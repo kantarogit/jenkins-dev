@@ -24,34 +24,29 @@ pipeline {
             }
         }
 
-        stage('Read pom') {
-            steps {
-                script {
-                    pom = readMavenPom(file: 'pom.xml')
-                    echo pom
-//                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-
-                }
-            }
-        }
+//        stage('Read pom') {
+//            steps {
+//                script {
+//                    pom = readMavenPom(file: 'pom.xml')
+//                    echo pom
+////                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+//
+//                }
+//            }
+//        }
 
         stage('Deploy to DEV') {
             when {
-                 branch 'feature/*'
+                branch 'feature/*'
             }
             steps {
                 script {
                     // read pom
                     echo "Reading pom..."
-//                    pom = bat script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-
-                    echo pom
-                    // increment version
-                    // deploy local artifact to jfrog
-                    // push incremented version to github
-                    echo "Deploying image to jfrog artifactory..."
-                    bat "mvn deploy"
-                    echo "Deploying image from ${env.BRANCH_NAME} to DEV cluster..."
+                    pom = readMavenPom(file: 'pom.xml')
+                    echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
+                    bat "mvn -B release:prepare release:perform"
+                    echo "Deploying artifact from ${env.BRANCH_NAME} to DEV cluster..."
                 }
             }
         }
@@ -61,8 +56,14 @@ pipeline {
                 changeRequest()
             }
             steps {
-                echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
-                echo "Deploying image from ${env.CHANGE_BRANCH} to TEST cluster"
+                script {
+                    echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
+                    echo "Reading pom..."
+                    pom = readMavenPom(file: 'pom.xml')
+                    echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
+                    bat "mvn -B release:prepare release:perform"
+                    echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
+                }
             }
         }
 
