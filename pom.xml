@@ -4,12 +4,12 @@
 
     <groupId>kantarce.dev</groupId>
     <artifactId>jenkins-dev</artifactId>
-    <version>f1test-1.2</version>
+    <version>f1test-1.3-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/kantarogit/jenkins-dev.git</connection>
         <developerConnection>scm:git:https://github.com/kantarogit/jenkins-dev.git</developerConnection>
-        <tag>f1test1.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
