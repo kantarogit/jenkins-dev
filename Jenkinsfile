@@ -77,14 +77,16 @@ pipeline {
                 changeRequest()
             }
             steps {
-                script {
-                    echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
-                    echo "Reading pom..."
-                    pom = readMavenPom(file: 'pom.xml')
-                    echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
-                    bat "git checkout origin/${env.CHANGE_BRANCH}"
-                    bat "release.bat"
-                    echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
+                withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
+                    script {
+                        echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
+                        echo "Reading pom..."
+                        pom = readMavenPom(file: 'pom.xml')
+                        echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
+                        bat "git checkout -b ${env.CHANGE_BRANCH}"
+                        bat "mvn release:prepare release:perform -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=f1-1.8-SNAPSHOT -DreleaseVersion=f1-1.7 -Dtag=f1-1.7"
+                        echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
+                    }
                 }
             }
         }
