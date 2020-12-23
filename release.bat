@@ -1,0 +1,1 @@
+mvn release:prepare release:perform -B -DdevelopmentVersion=f1-1.8-SNAPSHOT -DreleaseVersion=f1-1.7 -Dtag=f1-1.7

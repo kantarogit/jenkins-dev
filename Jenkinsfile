@@ -2,6 +2,27 @@ pipeline {
     agent any
 
     stages {
+
+//        stage('Prepare next iteration version') {
+//            when {
+//                anyOf {
+//                    branch 'development'
+//                    branch 'feature/*'
+//                }
+//            }
+//
+//            steps {
+//                script {
+//                    pom = readMavenPom(file: 'pom.xml')
+//                    if (!pom.version.contains("SNAPSHOT")) {
+//                        echo pom.version
+//                        pom.version = pom.version.plus("-SNAPSHOT")
+//                        echo pom.version
+//                        echo pom
+//                    }
+//                }
+//            }
+//        }
         stage('Build') {
             when {
                 anyOf {
@@ -61,7 +82,8 @@ pipeline {
                     echo "Reading pom..."
                     pom = readMavenPom(file: 'pom.xml')
                     echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
-                    bat "mvn -B release:prepare release:perform"
+                    bat "git checkout origin/${env.CHANGE_BRANCH}"
+                    bat "release.bat"
                     echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
                 }
             }
