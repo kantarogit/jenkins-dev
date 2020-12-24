@@ -16,7 +16,7 @@
         <repository>
             <id>central</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-releases</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-release</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-release/f1</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
