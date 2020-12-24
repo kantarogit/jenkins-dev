@@ -84,14 +84,8 @@ pipeline {
                         pom = readMavenPom(file: 'pom.xml')
                         echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
                         bat "git checkout -b ${env.CHANGE_BRANCH}"
-                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=f1-1.12-SNAPSHOT -DreleaseVersion=f1-1.11 -Dtag=f1-1.11"
+                        bat "mvn release:prepare release:perform -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=f1-1.13-SNAPSHOT -DreleaseVersion=f1-1.12 -Dtag=f1-1.12"
                         echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
-                    }
-                }
-
-                withCredentials([usernamePassword(credentialsId: '894acdee-3098-4945-af93-91b58e8bec0c', usernameVariable: 'jfromUsername', passwordVariable: 'jfrogPassword')]) {
-                    script {
-                        bat "mvn release:perform -B -DJENKINS_ARTIFACTORY_USERNAME=jfrogUsername -DJENKINS_ARTIFACTORY_PASSWORD=jfrogPassword"
                     }
                 }
             }
