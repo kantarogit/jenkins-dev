@@ -4,12 +4,12 @@
 
     <groupId>kantarce.dev</groupId>
     <artifactId>jenkins-dev</artifactId>
-    <version>f1-1.16</version>
+    <version>f1-1.17-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/kantarogit/jenkins-dev.git</connection>
         <developerConnection>scm:git:https://github.com/kantarogit/jenkins-dev.git</developerConnection>
-        <tag>f1-1.16</tag>
+        <tag>f1-1.14</tag>
     </scm>
 
     <distributionManagement>
