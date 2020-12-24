@@ -84,12 +84,12 @@ pipeline {
                         pom = readMavenPom(file: 'pom.xml')
                         echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
                         bat "git checkout -b ${env.CHANGE_BRANCH}"
-                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=f1-1.16-SNAPSHOT -DreleaseVersion=f1-1.15 -Dtag=f1-1.15"
+                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=f1-1.17-SNAPSHOT -DreleaseVersion=f1-1.16 -Dtag=f1-1.16"
                         echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
                     }
                 }
 
-                withMaven(mavenSettingsConfig: 'd57fdfe5-4916-4892-8eda-d3bc0d224f39') {
+                withMaven(mavenSettingsConfig: 'de1a0781-bd96-4464-a0b7-fef6480b1fb6') {
                     script {
                         bat "mvn release:perform -B"
                     }
