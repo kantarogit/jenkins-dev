@@ -56,23 +56,40 @@ pipeline {
 //            }
 //        }
 
-        stage('Deploy to DEV') {
+        stage('Release and deploy to DEV env') {
             when {
                 branch 'feature/*'
             }
             steps {
-                script {
-                    // read pom
-                    echo "Reading pom..."
-                    pom = readMavenPom(file: 'pom.xml')
-                    echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
-                    bat "mvn -B release:prepare release:perform"
-                    echo "Deploying artifact from ${env.BRANCH_NAME} to DEV cluster..."
+                withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
+                    script {
+//                        echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
+//                        echo "BRANCH ${env.BRANCH_NAME}"
+                        echo "Reading pom..."
+                        pom = readMavenPom(file: 'pom.xml')
+                        echo "Calculating release and next iteration version..."
+                        releaseVersionAndTag = pom.version.minus('-SNAPSHOT')
+                        echo "Release version and tag: " + releaseVersionAndTag
+                        currentminorVersion = releaseVersionAndTag.substring(releaseVersionAndTag.lastIndexOf(".") + 1).toInteger()
+                        nextIterationMinor = currentminorVersion + 1
+                        nextInterationSnapshot = pom.version.replace(currentminorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
+                        echo "Next iteration version: " + nextInterationSnapshot
+                        bat "git checkout -b ${env.BRANCH_NAME}"
+                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=${nextInterationSnapshot} -DreleaseVersion=${releaseVersionAndTag} -Dtag=${releaseVersionAndTag}"
+                    }
                 }
+
+                withMaven(mavenSettingsConfig: 'de1a0781-bd96-4464-a0b7-fef6480b1fb6') {
+                    script {
+                        bat "mvn -Darguments=-Djfrog.target=${env.BRANCH_NAME} release:perform -B"
+                    }
+                }
+
+                echo "Deploying to DEV env..."
             }
         }
 
-        stage('Deploy to TEST') {
+        stage('Release and deploy to TEST env') {
             when {
                 changeRequest()
             }
@@ -92,7 +109,6 @@ pipeline {
                         echo "Next iteration version: " + nextInterationSnapshot
                         bat "git checkout -b ${env.CHANGE_BRANCH}"
                         bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=${nextInterationSnapshot} -DreleaseVersion=${releaseVersionAndTag} -Dtag=${releaseVersionAndTag}"
-                        echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
                     }
                 }
 
@@ -101,6 +117,8 @@ pipeline {
                         bat "mvn -Darguments=-Djfrog.target=${env.CHANGE_BRANCH} release:perform -B"
                     }
                 }
+
+                echo "Deploying to TEST env..."
             }
         }
 
