@@ -82,9 +82,15 @@ pipeline {
                         echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
                         echo "Reading pom..."
                         pom = readMavenPom(file: 'pom.xml')
-                        echo "Publishing " + pom.version.minus('-SNAPSHOT') + " to artifactory..."
+                        echo "Calculating release and next iteration version..."
+                        releaseVersionAndTag = pom.version.minus('-SNAPSHOT')
+                        echo "Release version and tag: " + releaseVersionAndTag
+                        currentminorVersion = releaseVersionAndTag.substring(releaseVersionAndTag.lastIndexOf(".") + 1).toInteger()
+                        nextIterationMinor = currentminorVersion + 1
+                        nextInterationSnapshot = pom.version.replace(currentminorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
+                        echo "Next iteration version: " + nextInterationSnapshot
                         bat "git checkout -b ${env.CHANGE_BRANCH}"
-                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=f1-1.17-SNAPSHOT -DreleaseVersion=f1-1.16 -Dtag=f1-1.16"
+                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=${nextInterationSnapshot} -DreleaseVersion=${releaseVersionAndTag} -Dtag={releaseVersionAndTag}"
                         echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
                     }
                 }
