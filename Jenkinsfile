@@ -81,7 +81,6 @@ pipeline {
                     script {
                         echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
                         echo "BRANCH ${env.BRANCH_NAME}"
-                        bat "setx JFROG_BRANCH_TARGET ${env.CHANGE_BRANCH} /m"
                         echo "Reading pom..."
                         pom = readMavenPom(file: 'pom.xml')
                         echo "Calculating release and next iteration version..."
@@ -99,7 +98,7 @@ pipeline {
 
                 withMaven(mavenSettingsConfig: 'de1a0781-bd96-4464-a0b7-fef6480b1fb6') {
                     script {
-                        bat "mvn release:perform -B"
+                        bat "mvn release:perform -B -DjfrogProperty=${env.CNAHGE_BRANCH}"
                     }
                 }
             }

@@ -12,16 +12,20 @@
         <tag>f1-1.18</tag>
     </scm>
 
+    <properties>
+        <jfrogTarget>unknownFeatures</jfrogTarget>
+    </properties>
+
     <distributionManagement>
         <repository>
             <id>central</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-releases</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-release/${env.JFROG_BRANCH_TARGET}</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-release/${jfrogTarget}</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-snapshots</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-snapshot/${env.JFROG_BRANCH_TARGET}</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-snapshot/${jfrogTarget}</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
