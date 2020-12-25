@@ -16,12 +16,12 @@
         <repository>
             <id>central</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-releases</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-release/f1</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-release/${env.BRANCH_NAME}</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-snapshots</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-snapshot</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-snapshot/${env.BRANCH_NAME}</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
