@@ -81,7 +81,7 @@ pipeline {
                     script {
                         echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
                         echo "BRANCH ${env.BRANCH_NAME}"
-                        bat "SET JFROG_BRANCH_TARGET=${env.CHANGE_BRANCH}"
+                        bat "SETX JFROG_BRANCH_TARGET=${env.CHANGE_BRANCH}"
                         echo "Reading pom..."
                         pom = readMavenPom(file: 'pom.xml')
                         echo "Calculating release and next iteration version..."
