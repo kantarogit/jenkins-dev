@@ -98,7 +98,7 @@ pipeline {
 
                 withMaven(mavenSettingsConfig: 'de1a0781-bd96-4464-a0b7-fef6480b1fb6') {
                     script {
-                        bat "mvn -Djfrog.target=${env.CHANGE_BRANCH} release:perform -B"
+                        bat "mvn -Darguments=-Djfrog.target=${env.CHANGE_BRANCH} release:perform -B"
                     }
                 }
             }
