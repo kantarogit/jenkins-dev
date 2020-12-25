@@ -80,6 +80,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
                     script {
                         echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
+                        echo "BRANCH ${env.BRANCH_NAME}"
                         echo "Reading pom..."
                         pom = readMavenPom(file: 'pom.xml')
                         echo "Calculating release and next iteration version..."
