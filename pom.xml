@@ -4,24 +4,24 @@
 
     <groupId>kantarce.dev</groupId>
     <artifactId>jenkins-dev</artifactId>
-    <version>f1-1.20</version>
+    <version>f1-1.20-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/kantarogit/jenkins-dev.git</connection>
         <developerConnection>scm:git:https://github.com/kantarogit/jenkins-dev.git</developerConnection>
-        <tag>{releaseVersionAndTag}</tag>
+        <tag>f1-1.18</tag>
     </scm>
 
     <distributionManagement>
         <repository>
             <id>central</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-releases</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-release/${env.BRANCH_NAME}</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-release/${env.JFROG_BRANCH_TARGET}</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>a0kwmpovhf93o-artifactory-primary-0-snapshots</name>
-            <url>https://kantarce.jfrog.io/artifactory/libs-snapshot/${env.BRANCH_NAME}</url>
+            <url>https://kantarce.jfrog.io/artifactory/libs-snapshot/${env.JFROG_BRANCH_TARGET}</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

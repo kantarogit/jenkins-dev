@@ -81,6 +81,7 @@ pipeline {
                     script {
                         echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
                         echo "BRANCH ${env.BRANCH_NAME}"
+                        bat "export JFROG_BRANCH_TARGET=${env.CHANGE_BRANCH}"
                         echo "Reading pom..."
                         pom = readMavenPom(file: 'pom.xml')
                         echo "Calculating release and next iteration version..."
@@ -91,7 +92,7 @@ pipeline {
                         nextInterationSnapshot = pom.version.replace(currentminorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
                         echo "Next iteration version: " + nextInterationSnapshot
                         bat "git checkout -b ${env.CHANGE_BRANCH}"
-                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=${nextInterationSnapshot} -DreleaseVersion=${releaseVersionAndTag} -Dtag={releaseVersionAndTag}"
+                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DdevelopmentVersion=${nextInterationSnapshot} -DreleaseVersion=${releaseVersionAndTag} -Dtag=${releaseVersionAndTag}"
                         echo "Deploying artifact from ${env.CHANGE_BRANCH} to TEST cluster..."
                     }
                 }
