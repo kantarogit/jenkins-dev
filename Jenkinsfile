@@ -120,7 +120,7 @@ pipeline {
                         echo "Release version and tag: " + releaseVersionAndTag
                         currentminorVersion = releaseVersionAndTag.substring(releaseVersionAndTag.lastIndexOf(".") + 1).toInteger()
                         nextIterationMinor = currentminorVersion + 1
-                        nextInterationSnapshot = pom.version
+                        nextInterationSnapshot = pom.version.replace(currentminorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
                         echo "Next iteration version: " + nextInterationSnapshot
                         bat "git checkout -b ${env.CHANGE_BRANCH}"
                         // -DdevelopmentVersion=${nextInterationSnapshot}  -Dtag=${releaseVersionAndTag}
