@@ -4,7 +4,7 @@
 
     <groupId>kantarce.dev</groupId>
     <artifactId>jenkins-dev</artifactId>
-    <version>f3-1.0</version>
+    <version>f3-1.1-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/kantarogit/jenkins-dev.git</connection>
