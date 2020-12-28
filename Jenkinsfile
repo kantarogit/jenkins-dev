@@ -66,11 +66,12 @@ pipeline {
 //                        echo "PR ${env.CHANGE_BRANCH} --> ${env.CHANGE_TARGET}"
 //                        echo "BRANCH ${env.BRANCH_NAME}"
                         msg = powershell(returnStdout: true, script: '''
-                         $minors = @()
-                         git fetch origin
-                         $TAGS = git tag --list "${env.BRANCH_NAME}"
-                         foreach($tag in $TAGS) { $minors += $tag.SubString($tag.LastIndexOf(".")+1) -as [int]}
-                         return $minors | sort -descending | select -First 1
+                   $minors = @()
+git fetch origin
+$TAGS = git tag --list "f3*"
+foreach($tag in $TAGS) { $minors += $tag.SubString($tag.LastIndexOf(".")+1) -as [int]}
+if ($minors.Length -eq 0) { $minors.Clear(); $minors += 0 -as [int] }
+$minors | sort -descending | select -First 1
                          '''
                         )
                         echo msg
@@ -82,7 +83,7 @@ pipeline {
                         releaseVersionAndTag = pom.version.minus('-SNAPSHOT')
                         echo "Release version and tag: " + releaseVersionAndTag
                         currentminorVersion = releaseVersionAndTag.substring(releaseVersionAndTag.lastIndexOf(".") + 1).toInteger()
-                        nextIterationMinor = currentminorVersion + 1
+                        nextIterationMinor = msg
                         nextInterationSnapshot = pom.version.replace(currentminorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
                         echo "Next iteration version: " + nextInterationSnapshot
                         bat "git checkout -b ${env.BRANCH_NAME}"
