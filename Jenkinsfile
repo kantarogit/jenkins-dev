@@ -87,7 +87,7 @@ pipeline {
 //                        echo "Next iteration version: " + nextInterationSnapshot
                         releaseVersionAndTag = releaseVersionAndTag.replace("." + currentMinorVersion.toString(), "." + nextIterationMinor.toString())
                         bat "git checkout -b ${env.BRANCH_NAME}"
-                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag} -DdevelopmentVersion=${nextInterationSnapshot} -Dtag=${releaseVersionAndTag}"
+                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag} -DdevelopmentVersion=${nextIterationSnapshot} -Dtag=${releaseVersionAndTag}"
                     }
                 }
 
