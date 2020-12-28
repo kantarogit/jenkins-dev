@@ -83,11 +83,11 @@ pipeline {
                         //echo "Release version and tag: " + releaseVersionAndTag
                         //currentminorVersion = releaseVersionAndTag.substring(releaseVersionAndTag.lastIndexOf(".") + 1).toInteger()
 //                        nextIterationMinor = currentminorVersion + 1
-//                        nextIterationSnapshot = pom.version.replace(currentminorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
+                        nextIterationSnapshot = pom.version.replace(currentMinorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
 //                        echo "Next iteration version: " + nextInterationSnapshot
                         releaseVersionAndTag = releaseVersionAndTag.replace("." + currentMinorVersion.toString(), "." + nextIterationMinor.toString())
                         bat "git checkout -b ${env.BRANCH_NAME}"
-                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag}"
+                        bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag} -DdevelopmentVersion=${nextInterationSnapshot} -Dtag=${releaseVersionAndTag}"
                     }
                 }
 
