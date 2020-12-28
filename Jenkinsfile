@@ -77,15 +77,18 @@ pipeline {
                         )
 
                         nextIterationMinor = currentMinorVersion.toInteger() + 1
-                        echo "Reading pom..."
+                        echo "current minor " + currentMinorVersion
+                        echo "next minor    " + nextIterationMinor
                         pom = readMavenPom(file: 'pom.xml')
                         releaseVersionAndTag = pom.version.minus('-SNAPSHOT')
-                        //echo "Release version and tag: " + releaseVersionAndTag
+                        echo "Release version and tag: " + releaseVersionAndTag
                         //currentminorVersion = releaseVersionAndTag.substring(releaseVersionAndTag.lastIndexOf(".") + 1).toInteger()
 //                        nextIterationMinor = currentminorVersion + 1
-                        nextIterationSnapshot = pom.version.replace(currentMinorVersion.toString() + "-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
-//                        echo "Next iteration version: " + nextInterationSnapshot
-                        releaseVersionAndTag = releaseVersionAndTag.replace("." + currentMinorVersion.toString(), "." + nextIterationMinor.toString())
+                        nextIterationSnapshot = pom.version
+                        //.replace("0-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
+                        echo "Next iteration version: " + nextIterationSnapshot
+                        releaseVersionAndTag = releaseVersionAndTag.replace(".0", "." + nextIterationMinor.toString())
+                        echo "release version final:    " + releaseVersionAndTag
                         bat "git checkout -b ${env.BRANCH_NAME}"
                         bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag} -DdevelopmentVersion=${nextIterationSnapshot} -Dtag=${releaseVersionAndTag}"
                     }
