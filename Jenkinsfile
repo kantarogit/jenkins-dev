@@ -87,6 +87,7 @@ pipeline {
                         nextIterationSnapshot = pom.version
                         //.replace("0-SNAPSHOT", nextIterationMinor.toString() + "-SNAPSHOT")
                         echo "Next iteration version: " + nextIterationSnapshot
+                        releaseVersionAndTag = env.BRANCH_NAME + releaseVersionAndTag
                         releaseVersionAndTag = releaseVersionAndTag.replace(".0", "." + nextIterationMinor.toString())
                         echo "release version final:    " + releaseVersionAndTag
                         bat "git checkout -b ${env.BRANCH_NAME}"
