@@ -41,7 +41,6 @@ pipeline {
                     } else {
                         branchName = env.BRANCH_NAME
                     }
-                    branchName = branchName.replace("/", "%2F")
                 }
 
                 withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
