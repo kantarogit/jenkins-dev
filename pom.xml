@@ -4,12 +4,12 @@
 
     <groupId>kantarce.dev</groupId>
     <artifactId>jenkins-dev</artifactId>
-    <version>feature-xyzw-1000-1.7</version>
+    <version>1.0-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/kantarogit/jenkins-dev.git</connection>
         <developerConnection>scm:git:https://github.com/kantarogit/jenkins-dev.git</developerConnection>
-        <tag>feature-xyzw-1000-1.7</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
