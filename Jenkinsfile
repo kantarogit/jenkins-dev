@@ -46,7 +46,20 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
                     script {
                         echo "Calculating release and next iteration version..."
-                        currentMinorVersion = powershell(returnStdout: true, script:  '.\\findLatestGitTag.ps1')
+                        currentMinorVersion = powershell(returnStdout: true, script:  '''
+$minors = @()
+git fetch origin
+$TAGS = git tag --list "${branchName}"
+foreach ($tag in $TAGS)
+{
+    $minors += $tag.SubString($tag.LastIndexOf(".") + 1) -as [int]
+}
+if ($minors.Length -eq 0)
+{
+    $minors.Clear(); $minors += 0 -as [int]
+}
+$minors | sort -descending | select -First 1
+''')
                         nextIterationMinor = currentMinorVersion.toInteger() + 1
                         echo "current minor: " + currentMinorVersion
                         echo "next minor: " + nextIterationMinor
