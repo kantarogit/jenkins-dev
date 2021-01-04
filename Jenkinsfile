@@ -24,6 +24,15 @@ pipeline {
                 bat 'mvn clean install'
             }
         }
+        stage('Build') {
+            steps {
+                script {
+                    bat 'docker build -t jenkins-dev:1.0.0'
+                    echo 'listing docker images...'
+                    bat 'docker images'
+                }
+            }
+        }
 
         stage('Publish artifacts and release tag') {
             when {
