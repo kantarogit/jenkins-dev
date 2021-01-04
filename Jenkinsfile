@@ -24,10 +24,22 @@ pipeline {
                 bat 'mvn clean install'
             }
         }
+
         stage('Build docker') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'development'
+                    branch 'feature-*'
+                    changeRequest() // CHANGE_BRANCH
+                }
+            }
+
             steps {
                 script {
-                    bat 'docker build -t jenkins-dev:1.0.0 .'
+                    pom = readMavenPom(file: 'pom.xml')
+                    dockerTag = env.CHANGE_BRANCH + "-" + pom.version.minus('-SNAPSHOT')
+                    bat "docker build -t jenkins-dev:${dockerTag}"
                     echo 'listing docker images...'
                     bat 'docker images'
                 }
