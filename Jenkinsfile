@@ -27,7 +27,7 @@ pipeline {
         stage('Build docker') {
             steps {
                 script {
-                    bat 'docker build -t jenkins-dev:1.0.0'
+                    bat 'docker build -t jenkins-dev:1.0.0 .'
                     echo 'listing docker images...'
                     bat 'docker images'
                 }
