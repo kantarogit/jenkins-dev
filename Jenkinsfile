@@ -24,7 +24,7 @@ pipeline {
                 bat 'mvn clean install'
             }
         }
-        stage('Build') {
+        stage('Build docker') {
             steps {
                 script {
                     bat 'docker build -t jenkins-dev:1.0.0'
