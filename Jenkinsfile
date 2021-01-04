@@ -38,6 +38,7 @@ pipeline {
             steps {
                 script {
                     pom = readMavenPom(file: 'pom.xml')
+                    echo pom.version
                     dockerTag = env.CHANGE_BRANCH + "-" + pom.version.minus('-SNAPSHOT')
                     bat "docker build -t jenkins-dev:${dockerTag}" .
                     echo 'listing docker images...'
