@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage('Build docker image') {
+        stage('Build Docker image') {
             when {
                 anyOf {
                     branch 'main'
@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-        stage('Publish artifacts and release tag') {
+        stage('Publish artifacts and tag release') {
             when {
                 anyOf {
                     branch 'main'
@@ -85,7 +85,9 @@ pipeline {
 
                 withMaven(mavenSettingsConfig: 'de1a0781-bd96-4464-a0b7-fef6480b1fb6') {
                     script {
+                        echo "Publishing JAR to Artifactory"
                         bat "mvn -Darguments=-Djfrog.target=${branchName} release:perform -B"
+                        echo "Publishing Docker image to harbor/aws/jfrog..."
                     }
                 }
             }
