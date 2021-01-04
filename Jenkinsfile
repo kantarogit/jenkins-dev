@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('Build JAR') {
             when {
                 anyOf {
                     branch 'main'
@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage('Build docker') {
+        stage('Build docker image') {
             when {
                 anyOf {
                     branch 'main'
@@ -37,12 +37,8 @@ pipeline {
 
             steps {
                 script {
-                    pom = readMavenPom(file: 'pom.xml')
-                    echo pom.version
-                    dockerTag = env.CHANGE_BRANCH + "-" + pom.version.minus('-SNAPSHOT')
-                    bat "docker build -t jenkins-dev:${dockerTag}" .
-                    echo 'listing docker images...'
-                    bat 'docker images'
+                    echo "Building docker image with latest tag"
+                    bat "docker build -t jenkins-dev ."
                 }
             }
         }
@@ -82,6 +78,8 @@ pipeline {
                         echo "New release tag: " + releaseVersionAndTag
                         bat "git checkout -b ${branchName}"
                         bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag} -DdevelopmentVersion=${nextIterationSnapshot} -Dtag=${releaseVersionAndTag}"
+                        echo "Tagging docker image..."
+                        bat "docker tag jenkins-dev:latest jenkins-dev:${releaseVersionAndTag}"
                     }
                 }
 
