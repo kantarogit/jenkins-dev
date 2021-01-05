@@ -1,6 +1,6 @@
 $minors = @()
 git fetch origin
-$TAGS = git tag --list "${branchName}"
+$TAGS = git tag --list $args[0]
 foreach ($tag in $TAGS)
 {
     $minors += $tag.SubString($tag.LastIndexOf(".") + 1) -as [int]

@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('Build JAR') {
             when {
                 anyOf {
                     branch 'main'
@@ -25,7 +25,25 @@ pipeline {
             }
         }
 
-        stage('Publish artifacts and release tag') {
+        stage('Build Docker image') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'development'
+                    branch 'feature-*'
+                    changeRequest() // CHANGE_BRANCH
+                }
+            }
+
+            steps {
+                script {
+                    echo "Building docker image with latest tag"
+                    bat "docker build -t jenkins-dev ."
+                }
+            }
+        }
+
+        stage('Publish artifacts and tag release') {
             when {
                 anyOf {
                     branch 'main'
@@ -46,7 +64,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
                     script {
                         echo "Calculating release and next iteration version..."
-                        currentMinorVersion = powershell(returnStdout: true, script:  '.\\findLatestGitTag.ps1')
+                        echo branchName
+                        currentMinorVersion = powershell(returnStdout: true, script:  '.\\findLatestGitTag.ps1' + " " + branchName + "*")
                         nextIterationMinor = currentMinorVersion.toInteger() + 1
                         echo "current minor: " + currentMinorVersion
                         echo "next minor: " + nextIterationMinor
@@ -59,12 +78,16 @@ pipeline {
                         echo "New release tag: " + releaseVersionAndTag
                         bat "git checkout -b ${branchName}"
                         bat "mvn release:prepare -B -Dusername=${username} -Dpassword=${password} -DreleaseVersion=${releaseVersionAndTag} -DdevelopmentVersion=${nextIterationSnapshot} -Dtag=${releaseVersionAndTag}"
+                        echo "Tagging docker image..."
+                        bat "docker tag jenkins-dev:latest jenkins-dev:${releaseVersionAndTag}"
                     }
                 }
 
                 withMaven(mavenSettingsConfig: 'de1a0781-bd96-4464-a0b7-fef6480b1fb6') {
                     script {
+                        echo "Publishing JAR to Artifactory"
                         bat "mvn -Darguments=-Djfrog.target=${branchName} release:perform -B"
+                        echo "Publishing Docker image to harbor/aws/jfrog..."
                     }
                 }
             }
