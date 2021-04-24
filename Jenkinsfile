@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     echo "Building docker image with latest tag"
-                    sh "docker build -t jenkins-dev ."
+                    // sh "docker build -t jenkins-dev ."
                 }
             }
         }
