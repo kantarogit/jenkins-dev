@@ -61,7 +61,8 @@ pipeline {
                     }
                 }
 
-                withCredentials([usernamePassword(credentialsId: '4083cc2c-2d64-4782-9bfb-edef63dcd474', usernameVariable: 'username', passwordVariable: 'password')]) {
+                //4083cc2c-2d64-4782-9bfb-edef63dcd474
+                withCredentials([usernamePassword(credentialsId: '31042479-73f0-4da0-8054-53d94356e8c6', usernameVariable: 'username', passwordVariable: 'password')]) {
                     script {
                         echo "Calculating release and next iteration version..."
                         echo branchName
