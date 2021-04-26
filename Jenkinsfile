@@ -66,7 +66,7 @@ pipeline {
                     script {
                         echo "Calculating release and next iteration version..."
                         echo branchName
-                        currentMinorVersion = powershell(returnStdout: true, script:  '.\\findLatestGitTag.ps1' + " " + branchName + "*")
+                        currentMinorVersion = sh(returnStdout: true, script:  './findLatestTag.sh' + " " + branchName + "*")
                         nextIterationMinor = currentMinorVersion.toInteger() + 1
                         echo "current minor: " + currentMinorVersion
                         echo "next minor: " + nextIterationMinor
